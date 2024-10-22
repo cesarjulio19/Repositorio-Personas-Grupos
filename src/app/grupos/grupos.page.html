@@ -10,4 +10,16 @@
       <ion-title size="large">Grupos</ion-title>
     </ion-toolbar>
   </ion-header>
+  <app-routing-bar></app-routing-bar>
+
+  <ion-list>
+    <ion-item *ngFor="let g of group$ | async; let i = index">
+      <ion-label class="ion-text-nowrap">
+        {{g.name}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
