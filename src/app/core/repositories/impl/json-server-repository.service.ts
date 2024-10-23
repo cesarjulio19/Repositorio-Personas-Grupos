@@ -8,6 +8,7 @@ import { Model } from '../../models/base.model';
 import { IBaseMapping } from '../intefaces/base-mapping.interface';
 import { Paginated } from '../../models/paginated.model';
 import { BaseRepositoryHttpService } from './base-repository-http.service';
+import { Person } from '../../models/person.model';
 
 export interface PaginatedRaw<T> {
   first: number
@@ -39,6 +40,14 @@ export class JsonServerRepositoryService<T extends Model> extends BaseRepository
       .pipe(map(res=>{
         return this.mapping.getPaginated(page, pageSize, res.pages, res.data);
       }));
+  }
+
+  override add(entity: T): Observable<T>{
+    return this.http.post<T>(`${this.apiUrl}/${this.resource}`, entity)
+    .pipe(map(res => {
+      return this.mapping.getAdded(res); 
+    }));
+
   }
 
   

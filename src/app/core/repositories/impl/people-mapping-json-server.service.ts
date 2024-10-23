@@ -32,7 +32,7 @@ export interface PersonRaw {
             }:undefined};
     }
     getAdded(data: any):Person {
-        throw new Error("Method not implemented.");
+        return this.getOne(data);
     }
     getUpdated(data: any):Person {
         throw new Error("Method not implemented.");
