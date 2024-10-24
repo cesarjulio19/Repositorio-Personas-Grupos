@@ -4,7 +4,7 @@ import { Group } from '../../models/group.model';
 import { Paginated } from '../../models/paginated.model';
 
 export interface GroupRaw {
-  id: string
+  id?: string
   nombre: string
 }
 
@@ -13,11 +13,21 @@ export interface GroupRaw {
 })
 export class GroupMappingJsonServerService implements IBaseMapping<Group>{
 
-    setAdd(data: Group) {
-        throw new Error("Method not implemented.");
+    setAdd(data: Group):GroupRaw {
+        return {
+            nombre:data.name
+        };
     }
-    setUpdate(data: any) {
-        throw new Error("Method not implemented.");
+    setUpdate(data: Group):GroupRaw {
+        let toReturn:any = {};
+        Object.keys(data).forEach(key=>{
+            switch(key){
+                case 'name': toReturn['nombre']=data[key];
+                break;
+                default:
+            }
+        });
+        return toReturn;
     }
     getPaginated(page:number, pageSize: number, pages:number, data:GroupRaw[]): Paginated<Group> {
         return {page:page, pageSize:pageSize, pages:pages, data:data.map<Group>((d:GroupRaw)=>{
@@ -26,18 +36,18 @@ export class GroupMappingJsonServerService implements IBaseMapping<Group>{
     }
     getOne(data: GroupRaw):Group {
         return {
-            id:data.id, 
+            id:data.id!, 
             name:data.nombre, 
         };
     }
     getAdded(data: any):Group {
-        throw new Error("Method not implemented.");
+        return this.getOne(data);
     }
     getUpdated(data: any):Group {
-        throw new Error("Method not implemented.");
+        return this.getOne(data);
     }
     getDeleted(data: any):Group {
-        throw new Error("Method not implemented.");
+        return this.getOne(data);
     }
 
 

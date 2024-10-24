@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { PeopleService } from '../core/services/impl/people.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
+import { AlertController, AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
 import { Paginated } from '../core/models/paginated.model';
 import { Person } from '../core/models/person.model';
 import { PersonModalComponent } from '../shared/components/person-modal/person-modal.component';
@@ -16,21 +16,13 @@ export class PersonasPage implements OnInit {
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
 
-  /*public alertButtons = [
-    {
-      text: 'No',
-      cssClass: 'alert-button-cancel',
-    },
-    {
-      text: 'Yes',
-      cssClass: 'alert-button-confirm',
-    },
-  ];*/
+
 
   constructor(
     private animationCtrl: AnimationController,
     private peopleSv:PeopleService,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit(): void {
@@ -146,6 +138,38 @@ export class PersonasPage implements OnInit {
   async onAddPerson(){
     await this.presentModalPerson('new');
   }
+
+
+  async confirmDelete(id: string ) {
+  
+    const alert = await this.alertCtrl.create({
+      header: '¿Estás seguro?',
+      message: '¿Deseas eliminar a esta persona?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel',
+          handler: () => {
+            // Al presionar No, simplemente se cierra la alerta
+          }
+        },
+        {
+          text: 'Sí',
+          role: 'confirm',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            // Al presionar Sí, llama a la función de eliminar
+            this.deletePerson(id);
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+
+
 
   deletePerson(id:string){
     this.peopleSv.delete(id).subscribe({

@@ -17,8 +17,9 @@ import { GroupService } from './core/services/impl/group.service';
 import { SharedModule } from './shared/shared.module';
 import { PersonModalComponent } from './shared/components/person-modal/person-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GroupModalComponent } from './shared/components/group-modal/group-modal.component';
 @NgModule({
-  declarations: [AppComponent, PersonModalComponent],
+  declarations: [AppComponent, PersonModalComponent, GroupModalComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ReactiveFormsModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
