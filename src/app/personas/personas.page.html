@@ -14,15 +14,15 @@
   </ion-header>
   <app-routing-bar></app-routing-bar>
   <ion-list>
-    <ion-item *ngFor="let person of people$ | async; let i = index" >
+    <ion-item *ngFor="let person of people$ | async; let i = index" button detail="false" (click)="openPersonDetail(person, i)">
       <ion-avatar slot="start">
         <img *ngIf="person.picture?.thumbnail" #avatar alt="Silhouette of a person's head" [src]="person.picture!.thumbnail" />
         <img *ngIf="!(person.picture?.thumbnail)" #avatar alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
       </ion-avatar>
-      <ion-label class="ion-text-nowrap" (click)="openPersonDetail(person, i)">
+      <ion-label class="ion-text-nowrap" >
         {{person.name}} {{person.surname}} ({{person.age}} años)
       </ion-label>
-      <ion-button id ="delete" (click)="deletePerson(person.id)">Delete</ion-button>
+      <ion-button id ="delete" (click)="deletePerson(person.id); $event.stopPropagation()" >Delete</ion-button>
       <!-- <ion-alert trigger="delete" class="custom-alert" header="Are you sure?" [buttons]="alertButtons"></ion-alert> -->
     </ion-item>
   </ion-list>
