@@ -1,11 +1,12 @@
 <ion-header>
     <ion-title>
-      @if (person) {
-        <h1>Editar persona</h1>
+      @if (mode=='edit') {
+        Editar persona
       }
       @else {
-        <h1>Nueva persona</h1>
+        Nueva persona
       }
+
     </ion-title>
   </ion-header>
   <ion-content>
@@ -38,7 +39,13 @@
         <p *ngIf="email?.errors?.['required']">El email es obligatorio.</p>
         <p *ngIf="email?.errors?.['email']">Por favor, introduce un email válido.</p>
       </ion-text>
-  
+      <!-- Edad -->
+      <ion-item>
+        <ion-input label="Edad" label-placement="stacked"  type="text" formControlName="age"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="age?.invalid">
+        <p *ngIf="age?.errors?.['pattern']">La edad debe ser un número positivo</p>
+      </ion-text>
       <!-- Género -->
       <ion-item>
         <ion-label>Género</ion-label>
@@ -51,7 +58,7 @@
       </ion-text>
   
       <!-- Botón de Envío -->
-      <ion-button [disabled]="formGroup.invalid" expand="full" type="submit" >Registrar</ion-button>
+      <ion-button [disabled]="formGroup.invalid" expand="full" type="submit" [disabled]="formGroup.invalid">Registrar</ion-button>
     </form>
 
   </ion-content>

@@ -16,6 +16,17 @@ export class PersonasPage implements OnInit {
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
 
+  /*public alertButtons = [
+    {
+      text: 'No',
+      cssClass: 'alert-button-cancel',
+    },
+    {
+      text: 'Yes',
+      cssClass: 'alert-button-confirm',
+    },
+  ];*/
+
   constructor(
     private animationCtrl: AnimationController,
     private peopleSv:PeopleService,
@@ -36,6 +47,16 @@ export class PersonasPage implements OnInit {
   page:number = 1;
   pageSize:number = 25;
 
+  refresh(){
+    this.page=1;
+    this.peopleSv.getAll(this.page, this.pageSize).subscribe({
+      next:(response:Paginated<Person>)=>{
+        this._people.next([...response.data]);
+        this.page++;
+      }
+    });
+  }
+
 
   getMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
     this.peopleSv.getAll(this.page, this.pageSize).subscribe({
@@ -48,8 +69,9 @@ export class PersonasPage implements OnInit {
   }
 
   async openPersonDetail(person: any, index: number) {
+    await this.presentModalPerson('edit', person);
     this.selectedPerson = person;
-    const avatarElements = this.avatars.toArray();
+    /*const avatarElements = this.avatars.toArray();
     const clickedAvatar = avatarElements[index].nativeElement;
 
     // Obtener las coordenadas del avatar clicado
@@ -81,7 +103,7 @@ export class PersonasPage implements OnInit {
     // Por ejemplo, mostrar más información, navegar a otra página, etc.
 
     // Resetear la animación después de completarla
-    //this.isAnimating = false;
+    //this.isAnimating = false;*/
   }
 
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
@@ -89,29 +111,49 @@ export class PersonasPage implements OnInit {
     
   }
 
-  async onAddPerson(){
+  private async presentModalPerson(mode:'new'|'edit', person:Person|undefined=undefined){
     const modal = await this.modalCtrl.create({
       component:PersonModalComponent,
-      componentProps:{
-      }
+      componentProps:(mode=='edit'?{
+        person: person
+      }:{})
     });
-    modal.onDidDismiss().then((res:any)=>{
-
-      if(res.data){
-        const newPerson = res.data;
-
-        this.peopleSv.add(newPerson).subscribe({
-          next:(addedPerson: Person) =>{
-            this._people.next([...this._people.value, addedPerson]);
-          },
-          error: (err) => {
-            console.error('Error al añadir la persona:', err);
-          }
-        });
+    modal.onDidDismiss().then((response:any)=>{
+      switch (response.role) {
+        case 'new':
+          this.peopleSv.add(response.data).subscribe({
+            next:res=>{
+              this.refresh();
+            },
+            error:err=>{}
+          });
+          break;
+        case 'edit':
+          this.peopleSv.update(person!.id, response.data).subscribe({
+            next:res=>{
+              this.refresh();
+            },
+            error:err=>{}
+          });
+          break;
+        default:
+          break;
       }
-      
     });
     await modal.present();
+  }
+
+  async onAddPerson(){
+    await this.presentModalPerson('new');
+  }
+
+  deletePerson(id:string){
+    this.peopleSv.delete(id).subscribe({
+      next:res=>{
+        this.refresh();
+      },
+      error:err=>{}
+    })
   }
 
 }
