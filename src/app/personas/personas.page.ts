@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { PeopleService } from '../core/services/impl/people.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { AlertController, AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
 import { Paginated } from '../core/models/paginated.model';
 import { Person } from '../core/models/person.model';
 import { PersonModalComponent } from '../shared/components/person-modal/person-modal.component';
+import { GroupService } from '../core/services/impl/group.service';
+import { Group } from '../core/models/group.model';
 
 @Component({
   selector: 'app-personas',
@@ -21,6 +23,7 @@ export class PersonasPage implements OnInit {
   constructor(
     private animationCtrl: AnimationController,
     private peopleSv:PeopleService,
+    private groupSv:GroupService,
     private modalCtrl:ModalController,
     private alertCtrl: AlertController
   ) {}
@@ -104,11 +107,15 @@ export class PersonasPage implements OnInit {
   }
 
   private async presentModalPerson(mode:'new'|'edit', person:Person|undefined=undefined){
+    let _groups:Group[] = await lastValueFrom(this.groupSv.getAll())
     const modal = await this.modalCtrl.create({
       component:PersonModalComponent,
       componentProps:(mode=='edit'?{
-        person: person
-      }:{})
+        person: person,
+        groups: _groups
+      }:{
+        groups: _groups
+      })
     });
     modal.onDidDismiss().then((response:any)=>{
       switch (response.role) {

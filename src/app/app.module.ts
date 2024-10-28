@@ -18,8 +18,9 @@ import { SharedModule } from './shared/shared.module';
 import { PersonModalComponent } from './shared/components/person-modal/person-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GroupModalComponent } from './shared/components/group-modal/group-modal.component';
+import { GroupSelectableComponent } from './shared/components/group-selectable/group-selectable.component';
 @NgModule({
-  declarations: [AppComponent, PersonModalComponent, GroupModalComponent],
+  declarations: [AppComponent, PersonModalComponent, GroupModalComponent,GroupSelectableComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,ReactiveFormsModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
