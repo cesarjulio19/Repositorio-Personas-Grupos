@@ -6,6 +6,7 @@ import { RoutingBarComponent } from './components/routing-bar/routing-bar.compon
 import { PersonModalComponent } from './components/person-modal/person-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GroupSelectableComponent } from './components/group-selectable/group-selectable.component';
+import { GroupSelectableSearchComponent } from './components/group-selectable-search/group-selectable-search.component';
 
 
 

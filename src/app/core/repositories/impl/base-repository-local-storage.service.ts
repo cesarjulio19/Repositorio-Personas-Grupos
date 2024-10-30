@@ -50,6 +50,9 @@ export class BaseRespositoryLocalStorageService<T extends Model> implements IBas
     this._items = JSON.parse(localStorage.getItem(resource) ?? JSON.stringify(mockupList));
     localStorage.setItem(this.resource, JSON.stringify(this._items));
   }
+  getByName(page: number, pageSize: number, name: string): Observable<Paginated<T>> {
+    throw new Error('Method not implemented.');
+  }
 
   getAll(page:number, pageSize:number): Observable<Paginated<T>> {
     return of(

@@ -22,6 +22,10 @@ export class BaseService<T extends Model> implements IBaseService<T> {
       return this.repository.getAll(page, pageSize);
   }
 
+  getByName(page:number, pageSize:number, name:string): Observable<Paginated<T>> {    
+    return this.repository.getByName(page,pageSize,name)
+}
+
   getById(id: string): Observable<T | null> {
     return this.repository.getById(id);
   }
