@@ -22,19 +22,18 @@ export class GroupSelectableSearchComponent  implements OnInit, ControlValueAcce
   disabled:boolean = true;
   private _groups:BehaviorSubject<Group[]> = new BehaviorSubject<Group[]>([]);
   public groups$ = this._groups.asObservable();
-  pagination!:Paginated<Group>;
-  page:number = 1;
-  pageSize:number = 25;
-  activeFilter = "";
+
   propagateChange = (obj: any) => {}
 
   @ViewChild('popover', { read: IonPopover }) popover: IonPopover | undefined;
-  onTouched: any;
 
+  page:number = 1;
+  pageSize:number = 25;
+  pages:number = 0;
   constructor(
-    public gropsSvc:GroupService
-  ) { }
-
+    public groupsSvc:GroupService
+  ) { 
+  }
   ngOnDestroy(): void {
     this.popover?.dismiss();
   }
@@ -43,20 +42,43 @@ export class GroupSelectableSearchComponent  implements OnInit, ControlValueAcce
     this.loadGroups("");
   }
 
-  private async loadGroups(filter:string,notify:HTMLIonInfiniteScrollElement | null = null){
-    this.activeFilter = filter;
-    this.gropsSvc.getByName(this.page, this.pageSize,filter).subscribe({
-      next:(response:Paginated<Group>)=>{
-        this._groups.next([...this._groups.value, ...response.data]);
+  
+
+  private async loadGroups(filter:string){
+    this.page = 1;
+    this.groupsSvc.getAll(this.page, this.pageSize).subscribe({
+      next:response=>{
+        this._groups.next([...response.data]);
         this.page++;
-        notify?.complete();
-      }
-    });
+        this.pages = response.pages;
+      },
+      error:err=>{}
+    }) 
+  }
+
+
+  loadMoreGroups(notify:HTMLIonInfiniteScrollElement | null = null) {
+    if(this.page<=this.pages){
+      this.groupsSvc.getAll(this.page, this.pageSize).subscribe({
+        next:(response:Paginated<Group>)=>{
+          this._groups.next([...this._groups.value, ...response.data]);
+          this.page++;
+          notify?.complete();
+        }
+      });
+    }
+    else{
+      notify?.complete();
+    }
+  }
+  
+  onMoreGroups(ev:InfiniteScrollCustomEvent){
+    this.loadMoreGroups(ev.target);
   }
 
   private async selectGroup(id:string|undefined, propagate:boolean=false){
     if(id){
-      this.groupSelected  = await lastValueFrom(this.gropsSvc.getById(id));
+      this.groupSelected  = await lastValueFrom(this.groupsSvc.getById(id));
     }
     else
       this.groupSelected = null;
@@ -74,7 +96,7 @@ export class GroupSelectableSearchComponent  implements OnInit, ControlValueAcce
   }
 
   registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+    
   }
 
   setDisabledState?(isDisabled: boolean): void {
@@ -106,10 +128,4 @@ export class GroupSelectableSearchComponent  implements OnInit, ControlValueAcce
     if(popover)
       popover.dismiss();
   }
-
-  onIonInfinite(ev:InfiniteScrollCustomEvent) {
-    this.loadGroups(this.activeFilter,ev.target);
-    
-  }
-
 }

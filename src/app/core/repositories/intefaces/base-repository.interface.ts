@@ -2,9 +2,12 @@
 import { Observable } from 'rxjs';
 import { Model } from '../../models/base.model';
 import { Paginated } from '../../models/paginated.model';
+export interface SearchParams {
+  [key: string]: string; // O el tipo que necesites para los valores
+}
 
 export interface IBaseRepository<T extends Model> {
-  getAll(page:number, pageSize:number): Observable<T[]| Paginated<T>>;
+  getAll(page:number, pageSize:number, filters:SearchParams): Observable<T[]| Paginated<T>>;
   getByName(page:number, pageSize:number, name:string): Observable<Paginated<T>>;
   getById(id: string): Observable<T | null>;
   add(entity: T): Observable<T>; // Retorna el ID generado
