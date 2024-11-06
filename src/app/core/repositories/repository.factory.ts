@@ -10,6 +10,7 @@ import { Model } from '../models/base.model';
 import { IBaseMapping } from './intefaces/base-mapping.interface';
 import { JsonServerRepositoryService } from './impl/json-server-repository.service';
 import { Group } from '../models/group.model';
+import { StrapiRepositoryService } from './impl/strapi-repository.service';
 // Importa otros modelos según sea necesario
 
 export function createHttpRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
@@ -22,6 +23,10 @@ export function createLocalStorageRepository<T extends Model>(resource: string, 
 
 export function createJsonServerRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
   return new JsonServerRepositoryService<T>(http, apiUrl, resource, mapping);
+}
+
+export function createStrapiRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
+  return new StrapiRepositoryService<T>(http, apiUrl, resource, mapping);
 }
 
 // Ejemplo de configuración para People
@@ -48,5 +53,7 @@ export const GroupRepositoryFactory: FactoryProvider = {
   },
   deps: [HttpClient, GROUP_API_URL_TOKEN, GROUP_RESOURCE_NAME_TOKEN, GROUP_REPOSITORY_MAPPING_TOKEN]
 };
+
+
 
 // Repite esto para otros modelos como Usuario, etc.

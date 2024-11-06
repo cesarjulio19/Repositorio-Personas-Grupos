@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GroupRepositoryFactory, PeopleRepositoryFactory } from './core/repositories/repository.factory';
 import { PeopleService } from './core/services/impl/people.service';
-import { GROUP_API_URL_TOKEN, GROUP_REPOSITORY_MAPPING_TOKEN, GROUP_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN } from './core/repositories/repository.tokens';
+import { GROUP_API_URL_TOKEN, GROUP_REPOSITORY_MAPPING_TOKEN, GROUP_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, STRAPI_GROUP_API_URL_TOKEN, STRAPI_PEOPLE_API_URL_TOKEN } from './core/repositories/repository.tokens';
 import { provideHttpClient } from '@angular/common/http';
 import { PeopleLocalStorageMapping } from './core/repositories/impl/people-mapping-local-storage.service';
 import { PeopleMappingJsonServer } from './core/repositories/impl/people-mapping-json-server.service';
@@ -31,6 +31,9 @@ import { GroupSelectableSearchComponent } from './shared/components/group-select
     { provide: GROUP_RESOURCE_NAME_TOKEN, useValue: 'grupos' },
     { provide: PEOPLE_API_URL_TOKEN, useValue: 'http://localhost:3000' },
     { provide: GROUP_API_URL_TOKEN, useValue: 'http://localhost:3000' },
+    { provide: STRAPI_PEOPLE_API_URL_TOKEN, useValue: 'http://localhost:1337/api' },
+    { provide: STRAPI_GROUP_API_URL_TOKEN, useValue: 'http://localhost:1337/api' },
+    
     // Registrar los repositorios
     { 
       provide: PEOPLE_REPOSITORY_MAPPING_TOKEN, 
