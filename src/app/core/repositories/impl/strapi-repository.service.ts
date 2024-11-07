@@ -11,14 +11,26 @@ import { BaseRepositoryHttpService } from './base-repository-http.service';
 import { Person } from '../../models/person.model';
 
 export interface PaginatedRaw<T> {
-  first: number
-  prev: number|null
-  next: number|null
-  last: number
-  pages: number
-  items: number
-  data: T[]
-};
+  data: Data<T>[]
+  meta: Meta
+}
+
+export interface Data<T> {
+  id: number
+  attributes: T
+}
+
+
+export interface Meta {
+  pagination: Pagination
+}
+
+export interface Pagination {
+  page: number
+  pageSize: number
+  pageCount: number
+  total: number
+}
 
 @Injectable({
   providedIn: 'root'
@@ -36,48 +48,43 @@ export class StrapiRepositoryService<T extends Model> extends BaseRepositoryHttp
 
   override getAll(page:number, pageSize:number, filters:SearchParams = {}): Observable<T[] | Paginated<T>> {
     let search: string = Object.entries(filters)
-      .map(([k, v]) => `${k}_like=${v}`)
+      .map(([k, v]) => `${k}=${v}`)
       .reduce((p, v) => `${p}${v}`, "");
     if(page!=-1){
       return this.http.get<PaginatedRaw<T>>(
-        `${this.apiUrl}/${this.resource}/?_page=${page}&_per_page=${pageSize}&${search}`)
+        `${this.apiUrl}/${this.resource}?pagination[page]=${page}&pagination[pageSize]=${pageSize}&${search}&populate=group, user`)
         .pipe(map(res=>{
-          return this.mapping.getPaginated(page, pageSize, res.pages, res.data);
+          return this.mapping.getPaginated(page, pageSize, res.meta.pagination.total, res.data);
         }));
     }
     else{
-      return this.http.get<T[]>(
+      return this.http.get<PaginatedRaw<T>>(
         `${this.apiUrl}/${this.resource}?&${search}`)
-        .pipe(map(res=>{
-          return res.map((elem:any)=>{
+        .pipe(map((res:PaginatedRaw<T>)=>{
+          return res.data.map((elem:Data<T>)=>{
             return this.mapping.getOne(elem);
           });
         }));
     }
+    
   }
 
-  override add(entity: T): Observable<T>{
-    return this.http.post<T>(`${this.apiUrl}/${this.resource}`, this.mapping.setAdd(entity))
-    .pipe(map(res => {
-      return this.mapping.getAdded(res); 
-    }));
-
+  override add(entity: T): Observable<T> {
+    return this.http.post<T>(
+      `${this.apiUrl}/${this.resource}`, this.mapping.setAdd(entity)).pipe(map(res=>{
+        return this.mapping.getAdded(res);
+      }));
   }
 
   override update(id: string, entity: T): Observable<T> {
-    return this.http.patch<T>(
+    return this.http.put<T>(
       `${this.apiUrl}/${this.resource}/${id}`, this.mapping.setUpdate(entity)).pipe(map(res=>{
         return this.mapping.getUpdated(res);
       }));
   }
 
   override delete(id: string): Observable<T> {
-
-    return this.http.delete<T>(
-      `${this.apiUrl}/${this.resource}/${id}`).pipe(map(res=>{
-        return this.mapping.getDeleted(res);
-      }));
-
+    return this.http.delete<T>(`${this.apiUrl}/${this.resource}/${id}`).pipe(map(res=>this.mapping.getDeleted(res)));
   }
 
   

@@ -19,8 +19,6 @@ export const TASKS_REPOSITORY_TOKEN = new InjectionToken<ITasksRepository>('ITas
 export const API_URL_TOKEN = new InjectionToken<string>('ApiUrl');
 export const PEOPLE_API_URL_TOKEN = new InjectionToken<string>('PeopleApiUrl');
 export const GROUP_API_URL_TOKEN = new InjectionToken<string>('GroupApiUrl');
-export const STRAPI_PEOPLE_API_URL_TOKEN = new InjectionToken<string>('StrapiPeopleApiUrl');
-export const STRAPI_GROUP_API_URL_TOKEN = new InjectionToken<string>('StrapiGroupApiUrl');
 export const TASKS_API_URL_TOKEN = new InjectionToken<string>('TasksApiUrl');
 
 export const REPOSITORY_MAPPING_TOKEN = new InjectionToken<IBaseMapping<any>>('IBaseRepositoryMapping');

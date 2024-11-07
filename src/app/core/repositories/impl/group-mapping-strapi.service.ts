@@ -4,51 +4,73 @@ import { Group } from '../../models/group.model';
 import { Paginated } from '../../models/paginated.model';
 
 export interface GroupRaw {
-  id?: string
-  nombre: string
+    data: Data
+    meta: Meta
+  }
+  
+export interface Data {
+    id: number
+    attributes: GroupAttributes
 }
+export interface GroupData {
+    data: GroupAttributes;
+}
+
+export interface GroupAttributes {
+    name: string
+    createdAt?: string
+    updatedAt?: string
+    publishedAt?: string
+}
+
+export interface Meta {}
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupMappingStrapiService implements IBaseMapping<Group>{
 
-    setAdd(data: Group):GroupRaw {
+    setAdd(data: Group):GroupData {
         return {
-            nombre:data.name
+            data:{
+                name:data.name
+            }
         };
     }
-    setUpdate(data: Group):GroupRaw {
-        let toReturn:any = {};
+    setUpdate(data: Group):GroupData {
+        let toReturn:GroupData = {
+            data:{
+                name:""
+            }
+        };  
         Object.keys(data).forEach(key=>{
             switch(key){
-                case 'name': toReturn['nombre']=data[key];
+                case 'name': toReturn.data['name']=data[key];
                 break;
                 default:
             }
         });
         return toReturn;
     }
-    getPaginated(page:number, pageSize: number, pages:number, data:GroupRaw[]): Paginated<Group> {
-        return {page:page, pageSize:pageSize, pages:pages, data:data.map<Group>((d:GroupRaw)=>{
+    getPaginated(page:number, pageSize: number, pages:number, data:Data[]): Paginated<Group> {
+        return {page:page, pageSize:pageSize, pages:pages, data:data.map<Group>((d:Data)=>{
             return this.getOne(d);
         })};
     }
-    getOne(data: GroupRaw):Group {
+    getOne(data: Data):Group {
         return {
-            id:data.id!, 
-            name:data.nombre, 
+            id: data?.id ? data.id.toString() : '', 
+            name: data?.attributes?.name || '' 
         };
     }
-    getAdded(data: any):Group {
-        return this.getOne(data);
+    getAdded(data: GroupRaw):Group {
+        return this.getOne(data.data);
     }
-    getUpdated(data: any):Group {
-        return this.getOne(data);
+    getUpdated(data: GroupRaw):Group {
+        return this.getOne(data.data);
     }
-    getDeleted(data: any):Group {
-        return this.getOne(data);
+    getDeleted(data: GroupRaw):Group {
+        return this.getOne(data.data);
     }
-
 
 }

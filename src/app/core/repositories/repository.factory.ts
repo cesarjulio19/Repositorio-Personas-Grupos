@@ -37,7 +37,7 @@ export const PeopleRepositoryFactory: FactoryProvider = {
     // Por ejemplo, usar Firebase:
     //return createHttpRepository<Person>(http, apiURL);
     //return createLocalStorageRepository<Person>(resource, mapping);
-    return createJsonServerRepository<Person>(http, apiURL, resource, mapping);
+    return createStrapiRepository<Person>(http, apiURL, resource, mapping);
   },
   deps: [HttpClient, PEOPLE_API_URL_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN]
 };
@@ -49,7 +49,7 @@ export const GroupRepositoryFactory: FactoryProvider = {
     // Por ejemplo, usar Firebase:
     //return createHttpRepository<Person>(http, apiURL);
     //return createLocalStorageRepository<Person>(resource, mapping);
-    return createJsonServerRepository<Group>(http, apiURL, resource, mapping);
+    return createStrapiRepository<Group>(http, apiURL, resource, mapping);
   },
   deps: [HttpClient, GROUP_API_URL_TOKEN, GROUP_RESOURCE_NAME_TOKEN, GROUP_REPOSITORY_MAPPING_TOKEN]
 };
