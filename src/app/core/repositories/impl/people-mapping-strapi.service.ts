@@ -95,11 +95,13 @@ export interface Meta {}
     }
     getOne(data: Data<Person>):Person {
         return {
-            id:data.id.toString(), 
-            name:data.attributes.name, 
-            surname:data.attributes.surname, 
-            groupId:typeof data.attributes.group  === 'object'?data.attributes.group?.data.id.toString():undefined,
-            gender:this.fromGenderMapping[data.attributes.gender]
+            id: data.id?.toString() ?? '', // Asegúrate de que `id` nunca sea null o undefined
+            name: data.attributes.name,
+            surname: data.attributes.surname,
+            groupId: typeof data.attributes.group === 'object' && data.attributes.group?.data
+                ? data.attributes.group.data.id.toString() 
+                : undefined, // Valida que `data.attributes.group.data` exista
+            gender: this.fromGenderMapping[data.attributes.gender]
         };
     }
     getAdded(data: PersonRaw):Person {

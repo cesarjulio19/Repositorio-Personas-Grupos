@@ -1,0 +1,19 @@
+ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  app-login-form {
+    width: 100%;
+    max-width: 400px; /* Limita el ancho máximo a 400px */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white; /* O el color de fondo que prefieras */
+  }
+
+  #button-container{
+    margin: 10px;
+  }

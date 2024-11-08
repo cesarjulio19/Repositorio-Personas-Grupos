@@ -7,17 +7,19 @@ import { PersonModalComponent } from './components/person-modal/person-modal.com
 import { ReactiveFormsModule } from '@angular/forms';
 import { GroupSelectableComponent } from './components/group-selectable/group-selectable.component';
 import { GroupSelectableSearchComponent } from './components/group-selectable-search/group-selectable-search.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 
 
 @NgModule({
-  declarations: [RoutingBarComponent],
+  declarations: [RoutingBarComponent,RegisterFormComponent,LoginFormComponent],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule,
     ReactiveFormsModule
   ],
-  exports:[RoutingBarComponent]
+  exports:[RoutingBarComponent,RegisterFormComponent,LoginFormComponent]
 })
 export class SharedModule { }

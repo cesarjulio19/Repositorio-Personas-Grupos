@@ -1,0 +1,68 @@
+
+
+<ion-content class="ion-padding">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <!-- UserName -->
+    <ion-item>
+      <ion-input label="UserName" label-placement="stacked"  type="text" formControlName="username"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+      <p *ngIf="username?.errors?.['required']">El nombre de usuario es obligatorio.</p>
+      <p *ngIf="username?.errors?.['minlength']">El nombre de usuario debe tener al menos 2 caracteres.</p>
+    </ion-text>
+
+    <!-- Name -->
+    <ion-item>
+      <ion-input label="Name" label-placement="stacked"  type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+      <p *ngIf="name?.errors?.['required']">El nombre es obligatorio.</p>
+      <p *ngIf="name?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</p>
+    </ion-text>
+
+    <!-- Apellidos -->
+    <ion-item>
+      <ion-input label="Surname" label-placement="stacked"  type="text" formControlName="surname"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="surname?.invalid && (surname?.dirty || surname?.touched)">
+      <p *ngIf="surname?.errors?.['required']">Los apellidos son obligatorios.</p>
+      <p *ngIf="surname?.errors?.['minlength']">Los apellidos deben tener al menos 2 caracteres.</p>
+    </ion-text>
+
+    <!-- Email -->
+    <ion-item>
+      <ion-input label="Email" label-placement="stacked"  type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+      <p *ngIf="email?.errors?.['required']">El email es obligatorio.</p>
+      <p *ngIf="email?.errors?.['email']">Por favor, introduce un email válido.</p>
+    </ion-text>
+     <!-- Birthdate -->
+    <ion-item>
+      <ion-input label="Birthdate" label-placement="stacked"  type="date" formControlName="birthdate"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)">
+      <p *ngIf="birthdate?.errors?.['required']">la fecha de nacimiento es obligatorio.</p>
+    </ion-text>
+    <!-- Género -->
+    <ion-item>
+      <ion-select label="Gender" label-placement="stacked" formControlName="gender" placeholder="Selecciona un género">
+        <ion-select-option *ngFor="let gen of genders" [value]="gen">{{ gen }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="gender?.invalid && (gender?.dirty || gender?.touched)">
+      <p *ngIf="gender?.errors?.['required']">El género es obligatorio.</p>
+    </ion-text>
+     <!-- Password -->
+     <ion-item>
+      <ion-input label="Password" label-placement="stacked"  type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+      <p *ngIf="password?.errors?.['required']">El nombre es obligatorio.</p>
+    </ion-text>
+    <!-- Botón de Envío -->
+    <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Submit</ion-button>
+  </form>
+
+</ion-content>
+

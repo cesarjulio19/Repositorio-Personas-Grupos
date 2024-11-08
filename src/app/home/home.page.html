@@ -7,12 +7,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div id="button-container">
+    <ion-button (click) = "Login()">Login</ion-button>
+    <ion-button (click) = "Register()">Register</ion-button>
+  </div>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Home</ion-title>
     </ion-toolbar>
   </ion-header>
-  <app-routing-bar></app-routing-bar>
   <div id="container">
     <strong>Ready to create an app?</strong>
     <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>

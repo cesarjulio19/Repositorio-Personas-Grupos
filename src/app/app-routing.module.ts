@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'splash',
     pathMatch: 'full'
   },
   {
@@ -19,6 +19,19 @@ const routes: Routes = [
     path: 'grupos',
     loadChildren: () => import('./grupos/grupos.module').then( m => m.GruposPageModule)
   },
+  {
+    path: 'splash',
+    loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+
 ];
 
 @NgModule({

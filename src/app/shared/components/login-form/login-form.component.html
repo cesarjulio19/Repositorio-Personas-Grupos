@@ -1,0 +1,23 @@
+<ion-content class="ion-padding">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <!-- Email -->
+    <ion-item>
+      <ion-input label="Email" label-placement="stacked"  type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+      <p *ngIf="email?.errors?.['required']">El email es obligatorio.</p>
+      <p *ngIf="email?.errors?.['email']">Por favor, introduce un email válido.</p>
+    </ion-text>
+     <!-- Password -->
+     <ion-item>
+      <ion-input label="Password" label-placement="stacked"  type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+      <p *ngIf="password?.errors?.['required']">El nombre es obligatorio.</p>
+    </ion-text>
+    <!-- Botón de Envío -->
+    <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Submit</ion-button>
+  </form>
+
+</ion-content>
