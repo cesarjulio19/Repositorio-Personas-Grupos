@@ -9,5 +9,5 @@
     <ion-button (click) = "Register()">Register</ion-button>
     <ion-button (click) = "Home()">Home</ion-button>
   </div>
-  <app-login-form></app-login-form>
+  <app-login-form (formSubmitted)="onFormSubmitted($event)"></app-login-form>
 </ion-content>

@@ -10,5 +10,5 @@
     <ion-button (click) = "Login()">Login</ion-button>
     <ion-button (click) = "Home()">Home</ion-button>
   </div>
-<app-register-form></app-register-form>
+<app-register-form (formSubmitted)="onFormSubmitted($event)"></app-register-form>
 </ion-content>

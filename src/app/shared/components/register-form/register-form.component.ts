@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+
+export const passwordsMatchValidator: ValidatorFn = (formGroup: AbstractControl): ValidationErrors | null => {
+  const password = formGroup.get('password')?.value;
+  const confirmPassword = formGroup.get('confirmPassword')?.value;
+  return password === confirmPassword ? null : { passwordsMismatch: true };
+};
 
 @Component({
   selector: 'app-register-form',
@@ -7,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./register-form.component.scss'],
 })
 export class RegisterFormComponent  implements OnInit {
+  @Output() formSubmitted = new EventEmitter<any>();
   genders:string[] = ['Masculino', 'Femenino', 'Otros'];
   formGroup:FormGroup;
   constructor(private fb:FormBuilder) { 
@@ -17,8 +24,11 @@ export class RegisterFormComponent  implements OnInit {
       gender:['', [Validators.required]],
       birthdate:['', [Validators.required]],
       email:['', [Validators.required, Validators.email]],
-      password:['', [Validators.required]]
-    });
+      password:['', [Validators.required]],
+      confirmPassword:['', [Validators.required]]
+    },
+    { validators: passwordsMatchValidator }
+  );
   }
 
   get email(){
@@ -27,6 +37,10 @@ export class RegisterFormComponent  implements OnInit {
 
   get password(){
     return this.formGroup.controls['password'];
+  }
+
+  get confirmPassword(){
+    return this.formGroup.controls['confirmPassword'];
   }
 
   get username(){
@@ -69,6 +83,12 @@ export class RegisterFormComponent  implements OnInit {
   ngOnInit() {}
 
   onSubmit(){
+
+    if(this.formGroup.valid){
+      const formData = this.formGroup.value;
+      this.formSubmitted.emit(formData)
+
+    }
 
 
   }

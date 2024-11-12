@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent  implements OnInit {
+  @Output() formSubmitted = new EventEmitter<any>();
   formGroup:FormGroup;
   constructor(private fb:FormBuilder) { 
     this.formGroup = this.fb.group({
@@ -38,6 +39,13 @@ export class LoginFormComponent  implements OnInit {
   }
 
   onSubmit(){
+
+    if(this.formGroup.valid){
+
+      const formData = this.formGroup.value;
+      this.formSubmitted.emit(formData)
+  
+    }
 
 
   }

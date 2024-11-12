@@ -58,7 +58,15 @@
       <ion-input label="Password" label-placement="stacked"  type="password" formControlName="password"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-      <p *ngIf="password?.errors?.['required']">El nombre es obligatorio.</p>
+      <p *ngIf="password?.errors?.['required']">La contraseña es obligatorio.</p>
+    </ion-text>
+
+    <!--Confirm Password -->
+    <ion-item>
+      <ion-input label="Confirm Password" label-placement="stacked"  type="password" formControlName="confirmPassword"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.errors?.['passwordsMismatch'] && (confirmPassword?.dirty || confirmPassword?.touched)">
+      <p>Las contraseñas no coinciden.</p>
     </ion-text>
     <!-- Botón de Envío -->
     <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Submit</ion-button>
